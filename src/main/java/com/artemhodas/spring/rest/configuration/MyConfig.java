@@ -24,10 +24,9 @@ public class MyConfig {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         try {
             dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
-            dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/my_db?useSSL=false");
-            dataSource.setUser("bestUser");
-            dataSource.setPassword("bestUser");
-
+            dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/my_db?useSSL=false&serverTimezone=UTC");
+            dataSource.setUser("bestuser");
+            dataSource.setPassword("bestuser");
         } catch (PropertyVetoException e) {
             throw new RuntimeException(e);
         }
@@ -39,23 +38,22 @@ public class MyConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("com.artemhodas.spring.rest.entity");
-
         Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.dialect"
-                , "org.hibernate.dialect.MySQLDialect");
+        hibernateProperties.setProperty("hibernate.dialect",
+                "org.hibernate.dialect.MySQLDialect");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
-
         sessionFactory.setHibernateProperties(hibernateProperties);
-
         return sessionFactory;
     }
-        @Bean
-        public HibernateTransactionManager transactionManager(){
+
+    @Bean
+    public HibernateTransactionManager transactionManager() {
         HibernateTransactionManager transactionManager =
                 new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
-
-            return transactionManager;
-        }
+        return transactionManager;
     }
+
+
+}
 

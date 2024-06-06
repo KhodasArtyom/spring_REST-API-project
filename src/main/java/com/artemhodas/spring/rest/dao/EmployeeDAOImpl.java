@@ -29,14 +29,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public List<Employee> getAllEmployees() {
 
         Session session = sessionFactory.getCurrentSession();
-        List<Employee> allEmployees = session.createQuery("from Employee"
-                        , Employee.class).getResultList();
-
-//        Query<Employee> query = session.createQuery("from Employee "
+        //        Query<Employee> query = session.createQuery("from Employee "
 //                , Employee.class);
 //        List<Employee> allEmployees = query.getResultList();
 
-        return allEmployees;
+        return session.createQuery("from Employee ", Employee.class)
+                .getResultList();
     }
 
     @Override
@@ -51,7 +49,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         Session session = sessionFactory.getCurrentSession();
         Query<Employee> query = session.createQuery("delete from Employee "
                 + "where id=:employeeId");
-        query.setParameter("employeeId",id);
+        query.setParameter("employeeId", id);
         query.executeUpdate();
     }
 }
