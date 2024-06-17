@@ -1,10 +1,10 @@
 package com.artemhodas.spring.rest.exception_handling;
 
-public class EmployeeInCorrectData {
+public class EmployeeIncorrectData {
 
-   private String info;
+    private String info;
 
-    public EmployeeInCorrectData() {
+    public EmployeeIncorrectData() {
     }
 
     public String getInfo() {

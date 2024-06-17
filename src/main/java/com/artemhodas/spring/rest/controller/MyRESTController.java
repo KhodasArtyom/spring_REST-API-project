@@ -1,7 +1,7 @@
 package com.artemhodas.spring.rest.controller;
 
 import com.artemhodas.spring.rest.entity.Employee;
-import com.artemhodas.spring.rest.exception_handling.EmployeeInCorrectData;
+import com.artemhodas.spring.rest.exception_handling.EmployeeIncorrectData;
 import com.artemhodas.spring.rest.exception_handling.NoSuchEmployeeException;
 import com.artemhodas.spring.rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,27 +30,34 @@ public class MyRESTController {
         Employee employee = employeeService.getEmployee(id);
 
         if (employee == null) {
-            throw new NoSuchEmployeeException("There is no Employee with ID = " + id
-                    + " in Database");
+            throw new NoSuchEmployeeException("There is no Employee with ID = " +
+                    id + " in Database");
         } else {
             return employee;
         }
     }
 
-    @ExceptionHandler
-    private ResponseEntity<EmployeeInCorrectData> handleException(NoSuchEmployeeException exception) {
-        EmployeeInCorrectData data = new EmployeeInCorrectData();
-        data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+    @PostMapping("/employees")
+    public Employee addNewEmployee(@RequestBody Employee employee) {
+        employeeService.saveEmployee(employee);
+        return employee;
     }
 
-    @ExceptionHandler
-    private ResponseEntity<EmployeeInCorrectData> handleException(Exception exception) {
-        EmployeeInCorrectData data = new EmployeeInCorrectData();
-        data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee employee) {
+        employeeService.saveEmployee(employee);
+        return employee;
     }
 
-
-
+    @DeleteMapping("/employees/{id}")
+    public String deleteEmployee(@PathVariable("id") int id) {
+        Employee employee = employeeService.getEmployee(id);
+        if (employee == null) {
+            throw new NoSuchEmployeeException("There is no Employee with ID = " +
+                    id + " in Database");
+        } else {
+            employeeService.deleteEmployee(id);
+            return "Employee with ID = " + id + " was deleted";
+        }
+    }
 }
